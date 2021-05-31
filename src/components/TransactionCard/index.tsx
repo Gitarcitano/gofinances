@@ -1,15 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import {
-  Container,
-  Title,
-  Amount,
-  Footer,
-  Category,
-  Icon,
-  CategoryName,
-  Date,
-} from "./styles";
+import { Container, Title, Amount, Footer, Category, Icon, CategoryName, Date } from './styles';
 
 interface ICategory {
   name: string;
@@ -17,7 +8,7 @@ interface ICategory {
 }
 
 export interface TransactionCardProps {
-  type: "positive" | "negative";
+  type: 'positive' | 'negative';
   title: string;
   amount: string;
   category: ICategory;
@@ -34,7 +25,7 @@ export function TransactionCard({ data }: Props): JSX.Element {
       <Title>{data.title}</Title>
 
       <Amount type={data.type}>
-        {data.type === "negative" && "- "}
+        {data.type === 'negative' && '- '}
         {data.amount}
       </Amount>
 

@@ -1,19 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList } from 'react-native-gesture-handler';
 
-import { Button } from "../../components/Form/Button";
-import { categories } from "../../utils/categories";
-import {
-  Container,
-  Header,
-  Title,
-  Category,
-  Icon,
-  Name,
-  Separator,
-  Footer,
-} from "./styles";
+import { Button } from '../../components/Form/Button';
+import { categories } from '../../utils/categories';
+import { Container, Header, Title, Category, Icon, Name, Separator, Footer } from './styles';
 
 interface ICategory {
   key: string;
@@ -26,11 +17,7 @@ interface Props {
   closeSelectCategory: () => void;
 }
 
-export function CategorySelect({
-  category,
-  setCategory,
-  closeSelectCategory,
-}: Props): JSX.Element {
+export function CategorySelect({ category, setCategory, closeSelectCategory }: Props): JSX.Element {
   function handleCategorySelect(_category: ICategory) {
     setCategory(_category);
   }
@@ -43,13 +30,10 @@ export function CategorySelect({
 
       <FlatList
         data={categories}
-        style={{ flex: 1, width: "100%" }}
-        keyExtractor={(item) => item.key}
+        style={{ flex: 1, width: '100%' }}
+        keyExtractor={item => item.key}
         renderItem={({ item }) => (
-          <Category
-            onPress={() => handleCategorySelect(item)}
-            isActive={category.key === item.key}
-          >
+          <Category onPress={() => handleCategorySelect(item)} isActive={category.key === item.key}>
             <Icon name={item.icon} />
             <Name>{item.name}</Name>
           </Category>

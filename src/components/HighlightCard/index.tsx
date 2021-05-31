@@ -1,34 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import {
-  Container,
-  Header,
-  Title,
-  Icon,
-  Footer,
-  Amount,
-  LastTransaction,
-} from "./styles";
+import { Container, Header, Title, Icon, Footer, Amount, LastTransaction } from './styles';
 
 interface Props {
   title: string;
   amount: string;
   lastTransaction: string;
-  type: "up" | "down" | "total";
+  type: 'up' | 'down' | 'total';
 }
 
 const icon = {
-  up: "arrow-up-circle",
-  down: "arrow-down-circle",
-  total: "dollar-sign",
+  up: 'arrow-up-circle',
+  down: 'arrow-down-circle',
+  total: 'dollar-sign',
 };
 
-export function HighlightCard({
-  title,
-  amount,
-  lastTransaction,
-  type,
-}: Props): JSX.Element {
+export function HighlightCard({ title, amount, lastTransaction, type }: Props): JSX.Element {
   return (
     <Container type={type}>
       <Header>

@@ -1,30 +1,23 @@
-import React, { useState } from "react";
-import { Modal } from "react-native";
+import React, { useState } from 'react';
+import { Modal } from 'react-native';
 
-import { Button } from "../../components/Form/Button";
-import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
-import { Input } from "../../components/Form/Input";
-import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
-import { CategorySelect } from "../CategorySelect";
-import {
-  Container,
-  Header,
-  Title,
-  Form,
-  Fields,
-  TransactionTypes,
-} from "./styles";
+import { Button } from '../../components/Form/Button';
+import { CategorySelectButton } from '../../components/Form/CategorySelectButton';
+import { Input } from '../../components/Form/Input';
+import { TransactionTypeButton } from '../../components/Form/TransactionTypeButton';
+import { CategorySelect } from '../CategorySelect';
+import { Container, Header, Title, Form, Fields, TransactionTypes } from './styles';
 
 export function Register(): JSX.Element {
-  const [transactionType, setTransactionType] = useState("");
+  const [transactionType, setTransactionType] = useState('');
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
   const [category, setCategory] = useState({
-    key: "category",
-    name: "Categoria",
+    key: 'category',
+    name: 'Categoria',
   });
 
-  function handleTransactionTypeSelect(type: "up" | "down") {
+  function handleTransactionTypeSelect(type: 'up' | 'down') {
     setTransactionType(type);
   }
 
@@ -49,22 +42,19 @@ export function Register(): JSX.Element {
             <TransactionTypeButton
               type="up"
               title="Entrada"
-              onPress={() => handleTransactionTypeSelect("up")}
-              isActive={transactionType === "up"}
+              onPress={() => handleTransactionTypeSelect('up')}
+              isActive={transactionType === 'up'}
             />
 
             <TransactionTypeButton
               type="down"
               title="Saída"
-              onPress={() => handleTransactionTypeSelect("down")}
-              isActive={transactionType === "down"}
+              onPress={() => handleTransactionTypeSelect('down')}
+              isActive={transactionType === 'down'}
             />
           </TransactionTypes>
 
-          <CategorySelectButton
-            title={category.name}
-            onPress={handleOpenSelectCategoryModal}
-          />
+          <CategorySelectButton title={category.name} onPress={handleOpenSelectCategoryModal} />
         </Fields>
         <Button title="Enviar" />
       </Form>

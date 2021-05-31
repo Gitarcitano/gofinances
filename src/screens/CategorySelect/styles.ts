@@ -1,7 +1,7 @@
-import { Feather } from "@expo/vector-icons";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
+import { Feather } from '@expo/vector-icons';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RFValue } from 'react-native-responsive-fontsize';
+import styled from 'styled-components/native';
 
 interface CategoryProps {
   isActive: boolean;
