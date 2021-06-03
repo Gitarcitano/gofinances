@@ -1,6 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 import {
   useFonts,
   Poppins_400Regular,

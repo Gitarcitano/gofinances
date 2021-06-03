@@ -18,7 +18,7 @@ const icons = {
 export function TransactionTypeButton({ type, title, isActive, ...rest }: Props): JSX.Element {
   return (
     <Container type={type} isActive={isActive}>
-      <Button>
+      <Button {...rest}>
         <Icon name={icons[type]} type={type} />
         <Title>{title}</Title>
       </Button>
