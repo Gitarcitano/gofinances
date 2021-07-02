@@ -1,8 +1,12 @@
+/* eslint-disable camelcase */
 import 'react-native-gesture-handler';
+
 import React from 'react';
+import { StatusBar } from 'react-native';
 
 import 'intl';
 import 'intl/locale-data/jsonp/pt-BR';
+
 import {
   useFonts,
   Poppins_400Regular,
@@ -30,6 +34,7 @@ export default function App(): JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
+        <StatusBar barStyle="light-content" />
         <AppRoutes />
       </NavigationContainer>
     </ThemeProvider>
