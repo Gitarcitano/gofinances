@@ -1,13 +1,27 @@
+/* eslint-disable import/no-duplicates */
 import React, { useEffect, useState } from 'react';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { addMonths, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components/native';
 import { VictoryPie } from 'victory-native';
 
 import { HistoryCard } from '../../components/HistoryCard';
 import { categories } from '../../utils/categories';
-import { Container, Header, Title, Content, ChartContainer } from './styles';
+import {
+  Container,
+  Header,
+  Title,
+  Content,
+  ChartContainer,
+  MonthSelector,
+  MonthSelectorButton,
+  MonthSelectorIcon,
+  Month,
+} from './styles';
 
 interface Transaction {
   type: 'positive' | 'negative';
@@ -28,8 +42,17 @@ interface Category {
 }
 
 export function Summary(): JSX.Element {
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<Category[]>([]);
   const { colors } = useTheme();
+
+  function handleDateChange(action: 'next' | 'previous') {
+    if (action === 'next') {
+      setSelectedDate(oldDate => addMonths(oldDate, 1));
+    } else {
+      setSelectedDate(oldDate => addMonths(oldDate, -1));
+    }
+  }
 
   async function loadData() {
     const transactionKey = '@gofinances:transactions';
@@ -37,7 +60,10 @@ export function Summary(): JSX.Element {
     const formattedResponse = response ? JSON.parse(response) : [];
 
     const outcomes = formattedResponse.filter(
-      (transaction: Transaction) => transaction.type === 'negative',
+      (transaction: Transaction) =>
+        transaction.type === 'negative' &&
+        new Date(transaction.date).getMonth() === selectedDate.getMonth() &&
+        new Date(transaction.date).getFullYear() === selectedDate.getFullYear(),
     );
 
     const totalOutcomes = outcomes.reduce((accumulator: number, transaction: Transaction) => {
@@ -81,7 +107,7 @@ export function Summary(): JSX.Element {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [selectedDate]);
 
   return (
     <Container>
@@ -89,7 +115,25 @@ export function Summary(): JSX.Element {
         <Title>Resumo por categoria</Title>
       </Header>
 
-      <Content>
+      <Content
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          flex: 1,
+          paddingHorizontal: 24,
+          paddingBottom: useBottomTabBarHeight(),
+        }}
+      >
+        <MonthSelector>
+          <MonthSelectorButton onPress={() => handleDateChange('previous')}>
+            <MonthSelectorIcon name="chevron-left" />
+          </MonthSelectorButton>
+
+          <Month>{format(selectedDate, 'MMMM, yyyy', { locale: ptBR })} </Month>
+
+          <MonthSelectorButton onPress={() => handleDateChange('next')}>
+            <MonthSelectorIcon name="chevron-right" />
+          </MonthSelectorButton>
+        </MonthSelector>
         <ChartContainer>
           <VictoryPie
             data={totalByCategories}
