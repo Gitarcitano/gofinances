@@ -13,12 +13,12 @@ import {
   Poppins_500Medium,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
-import { NavigationContainer } from '@react-navigation/native';
 import AppLoading from 'expo-app-loading';
 import { ThemeProvider } from 'styled-components';
 
+import { AuthProvider, useAuth } from './src/contexts/Auth';
 import theme from './src/global/styles/theme';
-import { SignIn } from './src/screens/SignIn';
+import { Routes } from './src/routes';
 
 // import { AppRoutes } from './src/routes/app.routes';
 
@@ -28,18 +28,18 @@ export default function App(): JSX.Element {
     Poppins_500Medium,
     Poppins_700Bold,
   });
+  const { isLoadingUser } = useAuth();
 
-  if (!fontsLoaded) {
+  if (!fontsLoaded || isLoadingUser) {
     return <AppLoading />;
   }
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar barStyle="light-content" />
-        {/* <AppRoutes /> */}
-        <SignIn />
-      </NavigationContainer>
+      <StatusBar barStyle="light-content" />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </ThemeProvider>
   );
 }

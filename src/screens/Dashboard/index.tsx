@@ -7,6 +7,7 @@ import { useTheme } from 'styled-components/native';
 
 import { HighlightCard } from '../../components/HighlightCard';
 import { TransactionCard, TransactionCardProps } from '../../components/TransactionCard';
+import { useAuth } from '../../contexts/Auth';
 import {
   Container,
   Header,
@@ -42,27 +43,35 @@ interface HighlightData {
 
 export function Dashboard(): JSX.Element {
   const { colors } = useTheme();
+  const { user, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
   const [highlightData, setHighlightData] = useState<HighlightData>({} as HighlightData);
 
   function getLastTransactionDate(collection: DataListProps[], type: 'positive' | 'negative') {
+    const filteredTransactions = collection.filter(transaction => transaction.type === type);
+
+    if (filteredTransactions.length === 0) {
+      return 'Não há transações';
+    }
+
     const lastTransaction = new Date(
-      Math.max(
-        ...collection
-          .filter(transaction => transaction.type === type)
-          .map(transaction => new Date(transaction.date).getTime()),
-      ),
+      Math.max(...filteredTransactions.map(transaction => new Date(transaction.date).getTime())),
     );
 
-    return lastTransaction.toLocaleString('pt-BR', {
+    const parsedDate = lastTransaction.toLocaleString('pt-BR', {
       day: '2-digit',
       month: 'long',
     });
+
+    if (filteredTransactions[0].type === 'positive') {
+      return `Última entrada dia ${parsedDate}`;
+    }
+    return `Última saída dia ${parsedDate}`;
   }
 
   async function loadTransactions() {
-    const transactionKey = '@gofinances:transactions';
+    const transactionKey = `@gofinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(transactionKey);
     const localTransactions = response ? JSON.parse(response) : [];
 
@@ -111,14 +120,14 @@ export function Dashboard(): JSX.Element {
           style: 'currency',
           currency: 'BRL',
         }),
-        lastTransaction: `Última entrada dia ${lastIncomeTransaction}`,
+        lastTransaction: lastIncomeTransaction,
       },
       outcome: {
         amount: totalOutcome.toLocaleString('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         }),
-        lastTransaction: `Última saída dia ${lastOutcomeTransaction}`,
+        lastTransaction: lastOutcomeTransaction,
       },
       total: {
         amount: total.toLocaleString('pt-BR', {
@@ -153,17 +162,13 @@ export function Dashboard(): JSX.Element {
           <Header>
             <UserWrapper>
               <UserInfo>
-                <Photo
-                  source={{
-                    uri: 'https://avatars.githubusercontent.com/u/44866256?v=4',
-                  }}
-                />
+                <Photo source={{ uri: user.photo }} />
                 <User>
                   <UserGreeting>Olá, </UserGreeting>
-                  <UserName>Giovanne</UserName>
+                  <UserName>{user.name}</UserName>
                 </User>
               </UserInfo>
-              <LogoutButton onPress={() => {}}>
+              <LogoutButton onPress={signOut}>
                 <Icon name="power" />
               </LogoutButton>
             </UserWrapper>

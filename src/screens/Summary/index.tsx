@@ -12,6 +12,7 @@ import { useTheme } from 'styled-components/native';
 import { VictoryPie } from 'victory-native';
 
 import { HistoryCard } from '../../components/HistoryCard';
+import { useAuth } from '../../contexts/Auth';
 import { categories } from '../../utils/categories';
 import {
   Container,
@@ -45,6 +46,7 @@ interface Category {
 }
 
 export function Summary(): JSX.Element {
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [totalByCategories, setTotalByCategories] = useState<Category[]>([]);
@@ -61,7 +63,7 @@ export function Summary(): JSX.Element {
   }
 
   async function loadData() {
-    const transactionKey = '@gofinances:transactions';
+    const transactionKey = `@gofinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(transactionKey);
     const formattedResponse = response ? JSON.parse(response) : [];
 

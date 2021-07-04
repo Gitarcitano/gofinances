@@ -55,3 +55,6 @@ web-build/
 
 # Jest
 coverage/
+
+# Env
+.env
